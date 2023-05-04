@@ -1,0 +1,117 @@
+In class we learned that OOP is great for:
+➔ Fixing bugs
+➔ Adding new features
+➔ Organizing code so that it is easy to read, maintain and modify
+➔ Organize code into what is known as objects
+➔ OOP is important for building
+➔ It breaks requirements into chunks to make codes more manageable
+➔ Each chunk is self-contained yet potentially reusable
+➔ These chunks of code are called objects
+➔ OOP uses the DRY method aka don’t repeat yourself
+In the code we used OOP principles to define classes like Message, PlaintextMsg,
+CiphertextMsg, and Encryption. These classes allow for more structured and modular
+code, making it easier to organize and reuse code.
+In class we learned classes are:
+➔ Used to define a class, create objects, and access attributes and methods
+➔ Also how objects using the init method, including using default arguments
+➔ The rare use of the new constructor function
+In addition the project described us to understand and implement:
+Message class which is a base class for creating messages. It has an __init__ method
+for initializing a message and a __str__ method for converting a message to a string.
+PlaintextMsg class which is a subclass of the Message class. It takes a plaintext
+message as input and inherits the __init__ method from the Message class.
+CiphertextMsg class which is also a subclass of the Message class..
+03/25/23
+Encryption class which is a class that contains five methods for each encryption
+technique. The five encryption methods are:
+Caesar cipher which takes a message and a key as input and applies the Caesar cipher
+to encrypt the message.
+Substitution cipher which takes a message as input and applies the substitution
+cipher to encrypt the message.
+Transposition cipher which takes a message and a key as input and applies the
+transposition cipher to encrypt the message.
+Playfair cipher which takes a message and a key as input and applies the Playfair
+cipher to encrypt the message.
+Rsa cipher which takes a message and two prime numbers as input and applies the
+RSA cipher to encrypt the message. It generates a public-private key pair using the given
+prime numbers. It then converts the message to integers and applies the RSA encryption
+algorithm using the public key. Finally, it returns the ciphertext and the name.
+SO IN OUR CODE:
+❖ It uses classes to define different types of messages and encryption techniques.
+❖ The Encryption class defines various encryption techniques such as the Caesar
+cipher, substitution cipher, transposition cipher, Playfair cipher, and RSA cipher.
+❖ The Encryption class contains different methods for these encryption techniques,
+and each method returns a CiphertextMsg object along with a string that
+indicates the name of the encryption technique used.
+In class we learned that the main function:
+➔ Is to act as the starting point of execution for any software program
+➔ Contains the main logic of the program
+This code uses the main function to hold on to the encryption technique used. Then the
+code uses an infinite loop to get a message from the user and encrypts it using one of the
+five encryption methods randomly selected. The loop breaks if the user enters the word
+"Stop".
+In class we learned that Inheritance is:
+03/25/23
+➔ The process where objects of one class acquire the properties of another class
+➔ It also allows reusability, meaning that you can add additional features to a class
+without modifying it
+In the code we used the PlaintextMsg and CiphertextMsg classes inherited from the
+Message class. This allows them to inherit common attributes and methods from the
+Message class without having to define them again.
+In class we learned that Polymorphism is:
+➔ The ability to take more than one form
+➔ It allows a specific routine to use variables of different types at different times.
+Polymorphism in programming gives a program the ability to redefine methods
+for derived classes
+In the code we used, the PlaintextMsg and CiphertextMsg classes have their own
+__str__ methods, which override the __str__ method in the Message class. This allows
+for different behavior when the object is converted to a string (i.e., when it is printed).
+In class we learned that exception handling is:
+➔ Special error objects that occur when a program encounters an unexpected
+situation or error condition.
+➔ They are objects that inherit from the built-in class BaseException,
+➔ There are many different exception classes available, which can be handled in
+different ways
+➔ Exceptions can be caused by various situations such as syntax errors, division by
+zero, invalid function arguments, missing files, etc.
+In the code we used exception handling to catch and handle errors that might occur
+during encryption, such as when a message is not evenly divisible by the transposition
+cipher key.
+In class we learned that data abstraction is:
+➔ The process of removing characteristics from something to reduce it to a set of
+essential elements
+In this code the classes PlaintextMsg and CiphertextMsg provide an abstraction for plain
+and cipher texts, respectively, by encapsulating the text data and providing an interface
+for accessing it through the __str__() method. The Encryption class also provides an
+03/25/23
+abstraction for encryption methods by encapsulating the implementation details of each
+method and providing a common interface for encrypting messages with any of the
+implemented methods. This abstraction allows the main function to use any of the
+implemented encryption methods without needing to know the details of how each
+method works.
+Throughout this class and our previous python class we learned:
+1. Variables
+2. For loops
+3. While loops
+4. Functions
+5. Mathematical operators
+In the code we implemented all these, more specifically:
+1. While loop is used to check if the user input is valid. It will keep looping until the
+user enters a valid input. The second while loop is used to check if the user wants
+to continue playing the game. It will keep looping until the user enters 'no'.
+2. The for loop is used to iterate over the range of numbers from 1 to the randomly
+generated number. This is done in order to print out each number as a separate
+line of text.
+3. The first function is called "get_user_input" and is used to get user input and
+validate it. The second function is called "play_game" and is used to play the
+game. It generates a random number and asks the user to guess the number. It
+also checks if the user's guess is correct and keeps track of the number of guesses
+the user has made.
+4. The variable "play_again" is used to store the user's response to whether they
+want to play the game again. The variable "guesses" is used to store the number
+of guesses the user has made. The variable "random_number" is used to store the
+randomly generated number. The variable "user_guess" is used to store the user's
+guess.
+5. Mathematical operations are used such as addition, subtraction, modulus, and
+exponentiation, to implement encryption algorithms like the Caesar cipher and
+RSA cipher
