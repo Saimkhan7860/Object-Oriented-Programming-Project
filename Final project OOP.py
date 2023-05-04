@@ -1,0 +1,188 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[ ]:
+
+
+import random
+import string
+import math
+
+class Message:
+    def __init__(self, text):
+        self.text = text
+    
+    def __str__(self):
+        return self.text
+
+class PlaintextMsg(Message):
+    def __init__(self, text):
+        super().__init__(text)
+
+class CiphertextMsg(Message):
+    def __init__(self, text):
+        super().__init__(text)
+
+class Encryption:
+    def __init__(self):
+        pass
+    
+    def caesar_cipher(self, message, key):
+        ciphertext = ""
+        for char in message:
+            if char.isalpha():
+                shift = ord(key) - ord("a") + 1
+                new_char_code = ord(char.lower()) + shift
+                if new_char_code > ord("z"):
+                    new_char_code -= 26
+                new_char = chr(new_char_code)
+                if char.isupper():
+                    new_char = new_char.upper()
+                ciphertext += new_char
+            else:
+                ciphertext += char
+        return CiphertextMsg(ciphertext), "Caesar Cipher"
+    
+    def substitution_cipher(self, message):
+        alphabet = list(string.ascii_lowercase)
+        random.shuffle(alphabet)
+        mapping = {}
+        for i in range(len(alphabet)):
+            mapping[string.ascii_lowercase[i]] = alphabet[i]
+        ciphertext = ""
+        for char in message:
+            if char.isalpha():
+                new_char = mapping[char.lower()]
+                if char.isupper():
+                    new_char = new_char.upper()
+                ciphertext += new_char
+            else:
+                ciphertext += char
+        return CiphertextMsg(ciphertext), "Substitution Cipher"
+    
+    def transposition_cipher(self, message, key):
+        ciphertext = [""] * key
+        for col in range(key):
+            pointer = col
+            while pointer < len(message):
+                ciphertext[col] += message[pointer]
+                pointer += key
+        return CiphertextMsg("".join(ciphertext)), "Transposition Cipher"
+    
+    def playfair_cipher(self, message, key):
+        # Helper functions
+        def create_matrix(key):
+            alphabet = string.ascii_lowercase.replace("j", "")
+            matrix = []
+            for letter in key:
+                if letter not in matrix:
+                    matrix.append(letter)
+            for letter in alphabet:
+                if letter not in matrix:
+                    matrix.append(letter)
+            return matrix
+
+        def encode_pair(pair, matrix):
+            a, b = pair
+            a_row, a_col = divmod(matrix.index(a), 5)
+            b_row, b_col = divmod(matrix.index(b), 5)
+            if a_row == b_row:
+                return matrix[a_row*5+(a_col+1)%5] + matrix[b_row*5+(b_col+1)%5]
+            elif a_col == b_col:
+                return matrix[((a_row+1)%5)*5+a_col] + matrix[((b_row+1)%5)*5+b_col]
+            else:
+                return matrix[a_row*5+b_col] + matrix[b_row*5+a_col]
+
+        # Generate key matrix
+        matrix = create_matrix(key)
+
+        # Process message
+        message = message.lower().replace("j", "i").replace(" ", "")
+        if len(message) % 2 == 1:
+            message += "x"
+        pairs = [message[i:i+2] for i in range(0, len(message), 2)]
+        ciphertext = ""
+        for pair in pairs:
+            ciphertext += encode_pair(pair, matrix)
+
+        return CiphertextMsg(ciphertext), "Playfair Cipher"
+    
+    def product_cipher(self, message, key1, key2):
+        ciphertext, _ = self.caesar_cipher(message, key1)
+        ciphertext, _ = self.transposition_cipher(str(ciphertext), key2)
+        return ciphertext, "Product Cipher"
+        
+    def rsa_cipher(self, message, p, q):
+        def generate_keypair(p, q):
+            n = p * q
+            phi = (p - 1) * (q - 1)
+
+            # Find e such that e and phi(n) are coprime
+            e = random.randrange(1, phi)
+            while math.gcd(e, phi) != 1:
+                e = random.randrange(1, phi)
+
+            # Compute d such that d is the multiplicative inverse of e mod phi(n)
+            d = pow(e, -1, phi)
+
+            return ((e, n), (d, n))
+
+        # Generate keypair
+        public_key, private_key = generate_keypair(p, q)
+
+        # Convert message to integers
+        msg_ints = [ord(c) for c in message]
+
+        # Encrypt message using public key
+        encrypted_ints = [pow(c, public_key[0], public_key[1]) for c in msg_ints]
+
+        # Convert encrypted message back to characters
+        encrypted_chars = "".join([chr(c) for c in encrypted_ints])
+
+        return CiphertextMsg(encrypted_chars), "RSA Cipher"
+        
+def main():
+    while True:
+        # Get user input
+        message = input("Enter message to encrypt (or 'Stop' to quit): ")
+        
+        # Check if user wants to quit
+        if message.lower() == "stop":
+            break
+        
+        # Select a random encryption method
+        encryption_method = random.choice(["caesar", "substitution", "transposition", "playfair", "product", "rsa"])
+        
+        # Encrypt message using the selected method
+        encryption = Encryption()
+        if encryption_method == "caesar":
+            key = random.choice(string.ascii_lowercase)
+            ciphertext, method = encryption.caesar_cipher(message, key)
+        elif encryption_method == "substitution":
+            ciphertext, method = encryption.substitution_cipher(message)
+        elif encryption_method == "transposition":
+            key = random.randint(2, 10)
+            ciphertext, method = encryption.transposition_cipher(message, key)
+        elif encryption_method == "playfair":
+            key = "".join(random.sample(string.ascii_lowercase.replace("j", ""), 25))
+            ciphertext, method = encryption.playfair_cipher(message, key)
+        elif encryption_method == "product":
+            key1 = random.choice(string.ascii_lowercase)
+            key2 = random.randint(2, 10)
+            ciphertext, method = encryption.product_cipher(message, key1, key2)
+        else:
+            p = random.choice([17, 19, 23, 29, 31, 37, 41, 43, 47])
+            q = random.choice([53, 59, 61, 67, 71, 73, 79, 83, 89])
+            ciphertext, method = encryption.rsa_cipher(message, p, q)
+        
+        # Print the encrypted message and the encryption method used
+        print(f"Encrypted message using {method}:\n{ciphertext}\n")
+
+main()
+
+
+# In[ ]:
+
+
+
+
